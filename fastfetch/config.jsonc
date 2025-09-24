@@ -1,0 +1,97 @@
+{//     ~/.config/fastfetch/config.jsonc
+  "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/master/doc/json_schema.json",
+  "logo": {
+    "source": "~/.config/fastfetch/crystal-ansi.ans"
+  },
+  "display": {
+    "separator": " ",
+    "color": {
+        "title": "38;2;39;241;209"     // Title color
+    }
+  },
+  "modules": [
+    {
+      "type": "custom",
+      "format": " {#34}¤  {#35}¤  {#36}¤  {#34}¤  {#35}¤  {#36}¤  {#34}¤  {#35}¤  {#36}¤  {#34}¤  {#35}¤  {#36}¤  {#34}¤  {#35}¤  {#34}¤"
+    },
+
+    {"type": "title"
+    },
+
+    {"type" : "custom",
+    "format" : "──────────────────────────────"},
+    //purple
+    {"type" :"os",
+    "keyColor" : "38;2;150;40;199",
+    "outputColor" : "38;2;150;40;199"},
+
+    {"type" :"host",
+    "keyColor" : "38;2;150;40;199",
+    "outputColor" : "38;2;150;40;199"},
+
+    {"type" :"kernel",
+    "keyColor" : "38;2;150;40;199",
+    "outputColor" : "38;2;150;40;199"},
+
+    {"type" :"shell",
+    "keyColor" : "38;2;150;40;199",
+    "outputColor" : "38;2;150;40;199"},
+
+    {"type" : "custom",
+    "format" : "──────────────────────────────"},
+
+    //dark blue
+    {"type" :"packages",
+    "keyColor" : "38;2;3;93;143",
+    "outputColor" : "38;2;3;93;143"},
+    
+    {"type" :"de",
+    "keyColor" : "38;2;3;93;143",
+    "outputColor" : "38;2;3;93;143"},
+
+    {"type" :"wm",
+    "keyColor" : "38;2;3;93;143",
+    "outputColor" : "38;2;3;93;143"},
+
+    {"type" : "custom",
+    "format" : "──────────────────────────────"},
+    //cyan
+    {"type" :"terminal",
+    "keyColor" : "38;2;39;241;209",
+    "outputColor" : "38;2;39;241;209"},
+
+    {"type" :"cpu",
+    "keyColor" : "38;2;39;241;209",
+    "outputColor" : "38;2;39;241;209"},
+
+    {"type" :"gpu",
+    "keyColor" : "38;2;39;241;209",
+    "outputColor" : "38;2;39;241;209"},
+
+    {"type" :"memory",
+    "keyColor" : "38;2;39;241;209",
+    "outputColor" : "38;2;39;241;209"},
+
+    {"type" : "custom",
+    "format" : "──────────────────────────────"},
+    //white
+    {"type" :"disk",
+    "keyColor" : "38;2;255;255;255",
+    "outputColor" : "38;2;255;255;255"},
+
+    {"type" :"localip",
+    "keyColor" : "38;2;255;255;255",
+    "outputColor" : "38;2;255;255;255"},
+
+    {"type" :"battery",
+    "keyColor" : "38;2;255;255;255",
+    "outputColor" : "38;2;255;255;255"},
+
+    {"type" : "custom",
+    "format" : "──────────────────────────────"},
+    {
+    "type": "custom",
+    "format": " {#34}¤  {#35}¤  {#36}¤  {#34}¤  {#35}¤  {#36}¤  {#34}¤  {#35}¤  {#36}¤  {#34}¤  {#35}¤  {#36}¤  {#34}¤  {#35}¤  {#34}¤"
+    }
+  ]
+}
