@@ -430,14 +430,14 @@ globalkeys = gears.table.join(
     awful.key({ modkey }, "p", function() menubar.show() end,
               {description = "show the menubar", group = "launcher"}),
 
-    --Volume keys maybe change commands
-    awful.key({ }, "F5", function () awful.util.spawn("amixer -c 0 set Master toggle") end),
-    awful.key({ }, "F6", function () awful.util.spawn("amixer -c 0 set Master 5%-") end),
-    awful.key({ }, "F7", function () awful.util.spawn("amixer -c 0 set Master 5%+") end),
+    --Volume keys maybe change commands (doesn't work) (must change to pactl)
+    awful.key({ }, "XF86AudioMute", function () awful.util.spawn("pactl set-sink-mute @DEFAULT_SINK@ toggle") end),
+    awful.key({ }, "XF86AudioLowerVolume", function () awful.util.spawn("pactl set-sink-volume @DEFAULT_SINK@ -5%") end),
+    awful.key({ }, "XF86AudioRaiseVolume", function () awful.util.spawn("pactl set-sink-volume @DEFAULT_SINK@ +5%") end),
 
-    --Light keys
-    awful.key({ }, "F2", function () awful.util.spawn("rightnessctl set 5%-") end),
-    awful.key({ }, "F3", function () awful.util.spawn("brightnessctl set 5%+") end)
+    --Light keys (doesn't work)
+    awful.key({ }, "XF86MonBrightnessDown", function () awful.util.spawn("brightnessctl set 5%-") end),
+    awful.key({ }, "XF86MonBrightnessUp", function () awful.util.spawn("brightnessctl set 5%+") end)
 
     --Thingies
 
