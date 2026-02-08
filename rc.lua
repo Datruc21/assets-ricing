@@ -54,7 +54,7 @@ end
 -- Themes define colours, icons, font and wallpapers.
 beautiful.init(home.."/.config/awesome/default/theme.lua") --This line takes the theme table and make it globally available under the name beautiful
 
-
+beautiful.wallpaper = home .. "/.config/awesome/wallpapers/purple-crystal-wallpaper.jpg"
 
 
 
@@ -175,23 +175,6 @@ local tasklist_buttons = gears.table.join(
 
 
 
---Let's add the creation of our new function for replacing beautiful.theme 
-local function wallpaper_choosing(s)
-    local tag_wallpapers = {}
-    tag_wallpapers["purple"] = home.."/.config/awesome/wallpapers/purple-crystal-wallpaper.jpg"
-    tag_wallpapers["green"] = home.."/.config/awesome/wallpapers/green-crystal-wallpaper.jpg"
-    tag_wallpapers["blue"] = home.."/.config/awesome/wallpapers/blue-crystal-wallpaper.jpg" 
-    tag_wallpapers["white"] = home.."/.config/awesome/wallpapers/white-crystal-wallpaper.png"
-    local current_tag = awful.tag.selected(s)
-    if current_tag then
-        return tag_wallpapers[current_tag.name]
-    else 
-        return tag_wallpapers["purple"] --We return the purple one as it is the "first" tag
-    end
-end
-
-beautiful.wallpaper = wallpaper_choosing
-
 
 --fonction that sets the wallpaper
 --Need to modify it to connect it to the signal each time tag is changed
@@ -207,22 +190,9 @@ local function set_wallpaper(s)
     end
 end
 
---Connect the function set_wallpaper to the signal change of tag
---So we can call it each time the tag is changed
-screen.connect_signal("tag::history::update",set_wallpaper)
 
 -- Re-set wallpaper when a screen's geometry changes (e.g. different resolution)
 screen.connect_signal("property::geometry", set_wallpaper)
-
-
--- Définition d'une fonction utilitaire pour obtenir la couleur par nom de tag
-local function get_tag_color(name)
-    if name == "purple" then return beautiful.tag_purple or "#4e034eff"
-    elseif name == "green" then return beautiful.tag_green or "#008000"
-    elseif name == "blue" then return beautiful.tag_blue or "#0000FF"
-    elseif name == "white" then return beautiful.tag_white or "#FFFFFF"
-    else return beautiful.bg_normal or "#222222" end -- Couleur par défaut
-end
 
 
 local new_taglist = wibox.widget({
@@ -239,13 +209,12 @@ local new_taglist = wibox.widget({
     --white circle
 })
 
-
 awful.screen.connect_for_each_screen(function(s)
     -- Wallpaper
     set_wallpaper(s)
 
     -- Each screen has its own tag table.
-    local names = { "purple", "green", "blue", "white"}
+    local names = { "1", "2", "3", "4"}
     local l = awful.layout.suit  -- Just to save some typing: use an alias.
     local layouts = { l.tile, l.tile, l.tile, l.tile}
     awful.tag(names, s, layouts)
@@ -301,6 +270,7 @@ awful.screen.connect_for_each_screen(function(s)
         ), -- Middle widget
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
+            spacing = 10,
             mykeyboardlayout,
             wibox.widget.systray(), --indicates where notifications and other things must be displayed
             brightness_widget{
@@ -314,6 +284,7 @@ awful.screen.connect_for_each_screen(function(s)
             show_current_level = true,
             arc_thickness = 1,
         }),
+        s.mylayoutbox,
         },
     }
 end)
@@ -321,7 +292,7 @@ end)
 
 -- {{{ Mouse bindings
 root.buttons(gears.table.join(
-    awful.button({ }, 3, function () mymainmenu:toggle() end),
+    --awful.button({ }, 3, function () mymainmenu:toggle() end),
     awful.button({ }, 4, awful.tag.viewnext),
     awful.button({ }, 5, awful.tag.viewprev)
 ))
@@ -377,7 +348,7 @@ globalkeys = gears.table.join(
     -- Standard program
     awful.key({ modkey,           }, "Return", function () awful.spawn(terminal) end,
               {description = "open a terminal", group = "launcher"}),
-    awful.key({ modkey, "Control" }, "r", awesome.restart,
+    awful.key({ modkey, "Shift" }, "r", awesome.restart,
               {description = "reload awesome", group = "awesome"}),
     awful.key({ modkey, "Shift"   }, "q", awesome.quit,
               {description = "quit awesome", group = "awesome"}),
@@ -430,17 +401,18 @@ globalkeys = gears.table.join(
     awful.key({ modkey }, "p", function() menubar.show() end,
               {description = "show the menubar", group = "launcher"}),
 
-    --Volume keys maybe change commands (doesn't work) (must change to pactl)
+    --Volume keys maybe change commands 
     awful.key({ }, "XF86AudioMute", function () awful.util.spawn("pactl set-sink-mute @DEFAULT_SINK@ toggle") end),
     awful.key({ }, "XF86AudioLowerVolume", function () awful.util.spawn("pactl set-sink-volume @DEFAULT_SINK@ -5%") end),
     awful.key({ }, "XF86AudioRaiseVolume", function () awful.util.spawn("pactl set-sink-volume @DEFAULT_SINK@ +5%") end),
 
-    --Light keys (doesn't work)
+    --Light keys 
     awful.key({ }, "XF86MonBrightnessDown", function () awful.util.spawn("brightnessctl set 5%-") end),
-    awful.key({ }, "XF86MonBrightnessUp", function () awful.util.spawn("brightnessctl set 5%+") end)
+    awful.key({ }, "XF86MonBrightnessUp", function () awful.util.spawn("brightnessctl set 5%+") end),
 
     --Thingies
-
+    --screenshots
+     awful.key({ }, "Print", function () awful.util.spawn("scrot -e 'mv $f ~/screenshots/ 2>/dev/null'", false) end)
 )
 
 clientkeys = gears.table.join(
@@ -604,7 +576,7 @@ awful.rules.rules = {
 
     -- Add titlebars to normal clients and dialogs
     { rule_any = {type = { "normal", "dialog" }
-      }, properties = { titlebars_enabled = true }
+      }, properties = { titlebars_enabled = false }
     },
 
     -- Set Firefox to always map on the tag named "2" on screen 1.
@@ -628,45 +600,6 @@ client.connect_signal("manage", function (c)
     end
 end)
 
--- Add a titlebar if titlebars_enabled is set to true in the rules.
-client.connect_signal("request::titlebars", function(c)
-    -- buttons for the titlebar
-    local buttons = gears.table.join(
-        awful.button({ }, 1, function()
-            c:emit_signal("request::activate", "titlebar", {raise = true})
-            awful.mouse.client.move(c)
-        end),
-        awful.button({ }, 3, function()
-            c:emit_signal("request::activate", "titlebar", {raise = true})
-            awful.mouse.client.resize(c)
-        end)
-    )
-
-    awful.titlebar(c) : setup {
-        { -- Left
-            awful.titlebar.widget.iconwidget(c),
-            buttons = buttons,
-            layout  = wibox.layout.fixed.horizontal
-        },
-        { -- Middle
-            { -- Title
-                align  = "center",
-                widget = awful.titlebar.widget.titlewidget(c) --the ugly top border of each client
-            },
-            buttons = buttons,
-            layout  = wibox.layout.flex.horizontal
-        },
-        { -- Right
-            awful.titlebar.widget.floatingbutton (c),
-            awful.titlebar.widget.maximizedbutton(c),
-            awful.titlebar.widget.stickybutton   (c),
-            awful.titlebar.widget.ontopbutton    (c),
-            awful.titlebar.widget.closebutton    (c),
-            layout = wibox.layout.fixed.horizontal()
-        },
-        layout = wibox.layout.align.horizontal
-    }
-end)
 
 -- Enable sloppy focus, so that focus follows mouse.
 client.connect_signal("mouse::enter", function(c)
@@ -676,7 +609,6 @@ end)
 client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 -- }}}
-
 
 
 --Launching picom
