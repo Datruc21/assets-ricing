@@ -1,0 +1,68 @@
+#!/usr/bin/bash
+set -euo pipefail
+
+# Ajout du PPA pour fastfetch
+add-apt-repository -y ppa:zhangsongcui3371/fastfetch
+
+# Mise à jour et installation des paquets
+apt update
+apt install -y \
+  awesome imagemagick rofi picom fastfetch brightnessctl \
+  git language-pack-ar autoconf automake libtool neovim \
+  make acpi alsa-utils build-essentials
+
+
+# Installation de Kitty
+curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin launch=n
+ln -sf ~/.local/kitty.app/bin/kitty /usr/local/bin/kitty
+
+# Création des dossiers de configuration
+mkdir -p ~/.config/awesome
+mkdir -p ~/.config/rofi
+mkdir -p ~/.config/kitty
+mkdir -p ~/.config/picom
+
+
+cd ~/.config/awesome
+git clone https://github.com/Datruc21/assets-ricing.git
+mv assets-ricing/fastfetch ~/.config/fastfetch
+mv assets-ricing/wallpapers ~/.config/awesome
+mv assets-ricing/config.rasi ~/.config/rofi
+mv assets-ricing/kitty.conf ~/.config/kitty
+mv assets-ricing/picom.conf ~/.config/picom
+
+# Copier les thèmes et fichiers d'awesome
+cp -r /usr/share/awesome/themes/default ~/.config/awesome/
+cp -r /etc/xdg/awesome/* ~/.config/awesome/
+cp -f assets-ricing/theme.lua ~/.config/awesome/default
+cp -f assets-ricing/rc.lua ~/.config/awesome/
+
+rm -rf assets-ricing
+
+# Clonage des widgets pour Awesome
+git clone https://github.com/streetturtle/awesome-wm-widgets.git
+git clone https://github.com/vicious-widgets/vicious.git
+
+# Clonage et installation du thème d'icônes Arc
+git clone https://github.com/horst3180/arc-icon-theme --depth 1
+cd arc-icon-theme
+./autogen.sh --prefix=/usr
+make install
+cd ..
+rm -rf arc-icon-theme
+
+
+
+# Installation de la police JetBrains Mono
+FONT_VERSION=$(curl -s https://api.github.com/repos/JetBrains/JetBrainsMono/releases/latest | grep -Po '"tag_name": "v\K[0-9.]+')
+curl -sSLo jetbrains-mono.zip https://download.jetbrains.com/fonts/JetBrainsMono-$FONT_VERSION.zip
+unzip -qq jetbrains-mono.zip -d jetbrains-mono
+mkdir -p /usr/share/fonts/truetype/jetbrains-mono
+mv jetbrains-mono/fonts/ttf/*.ttf /usr/share/fonts/truetype/jetbrains-mono
+rm -rf jetbrains-mono.zip jetbrains-mono
+unset FONT_VERSION
+
+
+# Ajout de l'utilisateur au groupe video
+usermod -aG video jalil
+
