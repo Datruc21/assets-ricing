@@ -18,6 +18,10 @@ local hotkeys_popup = require("awful.hotkeys_popup")
 -- when client with a matching name is opened:
 require("awful.hotkeys_popup.keys")
 
+-- Vicious widgets
+local vicious = require("vicious")
+
+
 --to set the home and ~
 home = os.getenv("HOME")
 
@@ -200,13 +204,6 @@ local new_taglist = wibox.widget({
     filter  = awful.widget.taglist.filter.all,
     buttons = taglist_buttons
     --purple circle
-    
-
-    --green circle
-
-    --blue circle
-
-    --white circle
 })
 
 awful.screen.connect_for_each_screen(function(s)
@@ -250,10 +247,30 @@ awful.screen.connect_for_each_screen(function(s)
     local brightness_widget = require("awesome-wm-widgets.brightness-widget.brightness")
     local cmus_widget = require('awesome-wm-widgets.cmus-widget.cmus')
     local volume_widget = require('awesome-wm-widgets.volume-widget.volume')
-
-    
+    local network_widget = wibox.widget.textbox()
+    vicious.register(
+    	network_widget,
+	vicious.widgets.net,
+	function(widget, args)
+        if args["{wlp2s0 carrier}"] == 1 then
+            return string.format(
+                " 🌐 ↓ %.1f KB/s ↑ %.1f KB/s",
+                args["{wlp2s0 down_kb}"],
+                args["{wlp2s0 up_kb}"]
+            )
+        else
+            return " ❌ offline"
+        end
+    end,
+    1
+  )
     -- Create the wibox
-    s.mywibox = awful.wibar({ position = "top", screen = s })
+    s.mywibox = awful.wibar({ position = "top", screen = s, stretch = true, opacity = 0.85 })
+    
+    -- Change its color
+    local color_purple = "#600e83"
+    local color_azure = "#007fff"
+    s.mywibox.bg = gears.color(color_purple) 
 
     -- Add widgets to the wibox
     s.mywibox:setup {
@@ -263,7 +280,7 @@ awful.screen.connect_for_each_screen(function(s)
             s.mytaglist,
             cmus_widget()
         },
-         wibox.container.place(
+        wibox.container.place(
         mytextclock,
         "center", -- horizontal Alignement 
         "center"  -- vertical Alignement 
@@ -273,7 +290,8 @@ awful.screen.connect_for_each_screen(function(s)
             spacing = 10,
             mykeyboardlayout,
             wibox.widget.systray(), --indicates where notifications and other things must be displayed
-            brightness_widget{
+            network_widget,
+	    brightness_widget{
             type = 'icon_and_text',
             program = 'brightnessctl',
             step = 2,        
@@ -289,6 +307,7 @@ awful.screen.connect_for_each_screen(function(s)
     }
 end)
 -- }}}
+
 
 -- {{{ Mouse bindings
 root.buttons(gears.table.join(
