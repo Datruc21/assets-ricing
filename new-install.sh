@@ -73,4 +73,8 @@ usermod -aG video "$TARGET_USER"
 chown -R "$TARGET_USER:$TARGET_USER" "$USER_HOME/.config"
 chown -R "$TARGET_USER:$TARGET_USER" "$USER_HOME/.local"
 
+pkill picom
+
 echo "Installation terminée avec succès !"
+
+chown -R "$TARGET_USER:$TARGET_USER" "$USER_HOME/.config"
