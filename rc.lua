@@ -64,7 +64,7 @@ beautiful.wallpaper = home .. "/.config/awesome/wallpapers/purple-crystal-wallpa
 
 
 -- This is used later as the default terminal and editor to run.
-terminal = "kitty"
+terminal = "/usr/local/bin/kitty"
 editor = os.getenv("EDITOR") or "editor"
 editor_cmd = terminal .. " -e " .. editor
 
