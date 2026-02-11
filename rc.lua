@@ -58,9 +58,6 @@ end
 -- Themes define colours, icons, font and wallpapers.
 beautiful.init(home.."/.config/awesome/default/theme.lua") --This line takes the theme table and make it globally available under the name beautiful
 
-beautiful.wallpaper = home .. "/.config/awesome/wallpapers/purple-crystal-wallpaper.jpg"
-
-
 
 
 -- This is used later as the default terminal and editor to run.
@@ -232,7 +229,15 @@ awful.screen.connect_for_each_screen(function(s)
     s.mytaglist = awful.widget.taglist {
         screen  = s,
         filter  = awful.widget.taglist.filter.all,
-        buttons = taglist_buttons
+        buttons = taglist_buttons,
+	style = {
+		shape = gears.shape.octogon
+		}
+	--widget_template = {
+				
+
+
+	--}
         
     }
 
