@@ -645,4 +645,5 @@ client.connect_signal("unfocus", function(c)
 --Launching picom
 awful.spawn.with_shell("picom -b --backend glx &")
 awful.spawn.with_shell("nm-applet")
+awful.spawn.with_shell("blueman-applet")
 
