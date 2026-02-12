@@ -291,7 +291,7 @@ awful.screen.connect_for_each_screen(function(s)
             spacing = 10,
             mykeyboardlayout,
             wibox.widget.systray(), --indicates where notifications and other things must be displayed
-            network_widget,
+            --network_widget,
 	    brightness_widget{
             type = 'icon_and_text',
             program = 'brightnessctl',
@@ -644,3 +644,5 @@ client.connect_signal("unfocus", function(c)
 
 --Launching picom
 awful.spawn.with_shell("picom -b --backend glx &")
+awful.spawn.with_shell("nm-applet")
+
