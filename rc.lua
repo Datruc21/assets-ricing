@@ -10,6 +10,7 @@ require("awful.autofocus")
 local wibox = require("wibox")
 -- Theme handling library
 local beautiful = require("beautiful")
+
 -- Notification library
 local naughty = require("naughty")
 local menubar = require("menubar")
@@ -564,7 +565,8 @@ awful.rules.rules = {
                      placement = awful.placement.no_overlap+awful.placement.no_offscreen
      }
     },
-
+    
+    
     -- Floating clients.
     { rule_any = {
         instance = {
@@ -605,6 +607,8 @@ awful.rules.rules = {
     -- { rule = { class = "Firefox" },
     --   properties = { screen = 1, tag = "2" } },
 }
+
+
 -- }}}
 
 -- {{{ Signals
@@ -613,6 +617,12 @@ client.connect_signal("manage", function (c)
     -- Set the windows at the slave,
     -- i.e. put it at the end of others instead of setting it master.
     -- if not awesome.startup then awful.client.setslave(c) end
+    c.border_width = beautiful.border_width
+    if client.focus == c then
+        c.border_color = beautiful.border_focus
+    else
+        c.border_color = beautiful.border_normal
+    end
 
     if awesome.startup
       and not c.size_hints.user_position
@@ -621,6 +631,8 @@ client.connect_signal("manage", function (c)
         awful.placement.no_offscreen(c)
     end
 end)
+
+
 
 
 -- Enable sloppy focus, so that focus follows mouse.
