@@ -5,7 +5,7 @@ pcall(require, "luarocks.loader")
 -- Standard awesome library
 local gears = require("gears")
 local awful = require("awful")
-require("awful.autofocus")
+--require("awful.autofocus")
 -- Widget and layout library
 local wibox = require("wibox")
 -- Theme handling library
@@ -18,6 +18,8 @@ local hotkeys_popup = require("awful.hotkeys_popup")
 -- Enable hotkeys help widget for VIM and other apps
 -- when client with a matching name is opened:
 require("awful.hotkeys_popup.keys")
+
+
 
 -- Vicious widgets
 local vicious = require("vicious")
@@ -197,12 +199,7 @@ end
 screen.connect_signal("property::geometry", set_wallpaper)
 
 
-local new_taglist = wibox.widget({
-    screen  = s,
-    filter  = awful.widget.taglist.filter.all,
-    buttons = taglist_buttons
-    --purple circle
-})
+
 
 awful.screen.connect_for_each_screen(function(s)
     -- Wallpaper
@@ -618,11 +615,7 @@ client.connect_signal("manage", function (c)
     -- i.e. put it at the end of others instead of setting it master.
     -- if not awesome.startup then awful.client.setslave(c) end
     c.border_width = beautiful.border_width
-    if client.focus == c then
-        c.border_color = beautiful.border_focus
-    else
-        c.border_color = beautiful.border_normal
-    end
+    c.border_color = beautiful.border_normal
 
     if awesome.startup
       and not c.size_hints.user_position
@@ -640,9 +633,13 @@ client.connect_signal("mouse::enter", function(c)
     c:emit_signal("request::activate", "mouse_enter", {raise = false})
 end)
 
-client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
-client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
--- }}}
+-- Bordures focus/unfocus
+client.connect_signal("focus", function(c)
+    c.border_color = beautiful.border_focus
+    c.border_width = beautiful.border_width end)
+client.connect_signal("unfocus", function(c)
+    c.border_color = beautiful.border_normal
+    c.border_width = beautiful.border_width end)
 
 
 --Launching picom
