@@ -206,9 +206,9 @@ awful.screen.connect_for_each_screen(function(s)
     set_wallpaper(s)
 
     -- Each screen has its own tag table.
-    local names = { "1", "2", "3", "4", "5", "6", "7", "8", "9"}
+    local names = { "1", "2", "3", "4", "5"}
     local l = awful.layout.suit  -- Just to save some typing: use an alias.
-    local layouts = { l.tile, l.tile, l.tile, l.tile, l.title, l.title, l.title, l.title, l.title}
+    local layouts = { l.tile, l.tile, l.tile, l.tile}
     awful.tag(names, s, layouts)
 
 
@@ -553,7 +553,6 @@ awful.rules.rules = {
     -- All clients will match this rule.
     { rule = { },
       properties = { border_width = beautiful.border_width,
-                     border_color = beautiful.border_normal,
                      focus = awful.client.focus.filter,
                      raise = true,
                      keys = clientkeys,
@@ -636,14 +635,19 @@ end)
 -- Bordures focus/unfocus
 client.connect_signal("focus", function(c)
     c.border_color = beautiful.border_focus
-    c.border_width = beautiful.border_width end)
+    c.border_width = beautiful.border_width 
+    end)
 client.connect_signal("unfocus", function(c)
     c.border_color = beautiful.border_normal
-    c.border_width = beautiful.border_width end)
+    c.border_width = beautiful.border_width
+    end)
 
 
---Launching picom
+
+
+
+--Launching picom and other stuff
 awful.spawn.with_shell("picom -b --backend glx &")
-awful.spawn.with_shell("nm-applet")
 awful.spawn.with_shell("blueman-applet")
-
+awful.spawn.with_shell("nm-applet")
+awful.spawn.with_shell("xfce4-clipman")
