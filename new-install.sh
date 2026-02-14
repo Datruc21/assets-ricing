@@ -13,6 +13,10 @@ apt install -y \
   git language-pack-ar autoconf automake libtool neovim \
   make acpi alsa-utils build-essential unzip curl nm-applet xfce4-clipboard blueman xfce4-power-manager
 
+apt install -y xserver-xephyr
+
+
+
 
 # Installation de Kitty (on l'installe dans le bin système pour qu'il soit accessible)
 curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin launch=n
