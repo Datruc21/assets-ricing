@@ -76,6 +76,7 @@ chown -R "$TARGET_USER:$TARGET_USER" "$USER_HOME/.local"
 
 pkill picom
 
+xset r rate 250 25
 echo "Installation terminée avec succès !"
 
 chown -R "$TARGET_USER:$TARGET_USER" "$USER_HOME/.config"
