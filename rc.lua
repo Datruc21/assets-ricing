@@ -5,7 +5,7 @@ pcall(require, "luarocks.loader")
 -- Standard awesome library
 local gears = require("gears")
 local awful = require("awful")
---require("awful.autofocus")
+require("awful.autofocus")
 -- Widget and layout library
 local wibox = require("wibox")
 -- Theme handling library
@@ -79,8 +79,6 @@ modkey = "Mod4"
 awful.layout.layouts = {
     awful.layout.suit.floating,
     awful.layout.suit.tile,
-    awful.layout.suit.fair.horizontal,
-    awful.layout.suit.spiral.dwindle,
     awful.layout.suit.max,
     awful.layout.suit.max.fullscreen,
     awful.layout.suit.magnifier
@@ -220,7 +218,8 @@ awful.screen.connect_for_each_screen(function(s)
         filter  = awful.widget.taglist.filter.all,
         buttons = taglist_buttons,
 	style = {
-		shape = gears.shape.octogon
+		shape = gears.shape.octogon,
+        spacing = 20
 		}
 	--widget_template = {
 				
@@ -239,9 +238,10 @@ awful.screen.connect_for_each_screen(function(s)
 
     local batteryarc_widget = require("awesome-wm-widgets.batteryarc-widget.batteryarc")
     local brightness_widget = require("awesome-wm-widgets.brightness-widget.brightness")
-    local cmus_widget = require('awesome-wm-widgets.cmus-widget.cmus')
-    local volume_widget = require('awesome-wm-widgets.volume-widget.volume')
-    local network_widget = wibox.widget.textbox()
+    local volume_widget_module = require('awesome-wm-widgets.pactl-widget.volume')
+    volume_widget = volume_widget_module{
+    widget_type = 'arc'
+}    local network_widget = wibox.widget.textbox()
     vicious.register(
     	network_widget,
 	vicious.widgets.net,
@@ -270,7 +270,6 @@ awful.screen.connect_for_each_screen(function(s)
         { -- Left widgets
             layout = wibox.layout.fixed.horizontal,
             s.mytaglist,
-            cmus_widget()
         },
         wibox.container.place(
         mytextclock,
@@ -279,7 +278,7 @@ awful.screen.connect_for_each_screen(function(s)
         ), -- Middle widget
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
-            spacing = 10,
+            spacing = 15,
             mykeyboardlayout,
             wibox.widget.systray(), --indicates where notifications and other things must be displayed
             --network_widget,
@@ -287,14 +286,11 @@ awful.screen.connect_for_each_screen(function(s)
             type = 'icon_and_text',
             program = 'brightnessctl',
             step = 2,        
-        },volume_widget{
-            widget_type = 'arc'
-        },
+        },volume_widget,
             batteryarc_widget({
             show_current_level = true,
             arc_thickness = 1,
-        }),
-        s.mylayoutbox,
+        })
         },
     }
 end)
@@ -416,7 +412,6 @@ globalkeys = gears.table.join(
     awful.key({ }, "XF86AudioMute", function () awful.util.spawn("pactl set-sink-mute @DEFAULT_SINK@ toggle") end),
     awful.key({ }, "XF86AudioLowerVolume", function () awful.util.spawn("pactl set-sink-volume @DEFAULT_SINK@ -5%") end),
     awful.key({ }, "XF86AudioRaiseVolume", function () awful.util.spawn("pactl set-sink-volume @DEFAULT_SINK@ +5%") end),
-
     --Light keys 
     awful.key({ }, "XF86MonBrightnessDown", function () awful.util.spawn("brightnessctl set 5%-") end),
     awful.key({ }, "XF86MonBrightnessUp", function () awful.util.spawn("brightnessctl set 5%+") end),
@@ -605,7 +600,7 @@ client.connect_signal("manage", function (c)
     -- i.e. put it at the end of others instead of setting it master.
     -- if not awesome.startup then awful.client.setslave(c) end
     c.border_width = beautiful.border_width
-    c.border_color = beautiful.border_normal
+    c.border_color = beautiful.border_focus
     if awesome.startup
       and not c.size_hints.user_position
       and not c.size_hints.program_position then
@@ -613,8 +608,6 @@ client.connect_signal("manage", function (c)
         awful.placement.no_offscreen(c)
     end
 end)
-
-
 
 
 -- Enable sloppy focus, so that focus follows mouse.
