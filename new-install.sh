@@ -9,7 +9,7 @@ USER_HOME="/home/$TARGET_USER"
 add-apt-repository -y ppa:zhangsongcui3371/fastfetch
 apt update
 apt install -y \
-  awesome imagemagick rofi picom fastfetch brightnessctl \
+  awesome imagemagick scrot rofi picom fastfetch brightnessctl \
   git language-pack-ar autoconf automake libtool neovim \
   make acpi alsa-utils build-essential unzip curl nm-applet xfce4-clipboard blueman xfce4-power-manager
 
