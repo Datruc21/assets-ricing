@@ -10,11 +10,8 @@ add-apt-repository -y ppa:zhangsongcui3371/fastfetch
 apt update
 apt install -y \
   awesome imagemagick scrot rofi picom fastfetch brightnessctl \
-  git language-pack-ar autoconf automake libtool neovim \
+  git language-pack-ar autoconf automake libtool neovim xserver-xephyr \
   make acpi alsa-utils build-essential unzip curl nm-applet xfce4-clipboard blueman xfce4-power-manager
-
-apt install -y xserver-xephyr
-
 
 
 
