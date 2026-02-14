@@ -44,6 +44,12 @@ cp -r /etc/xdg/awesome/* "$USER_HOME/.config/awesome/"
 cp -f assets-ricing/theme.lua "$USER_HOME/.config/awesome/default/"
 cp -f assets-ricing/rc.lua "$USER_HOME/.config/awesome/"
 
+# Remplacement du .bashrc depuis le repo assets-ricing
+if [ -f assets-ricing/bashrc ]; then
+    mv -f assets-ricing/bashrc "$USER_HOME/.bashrc"
+fi
+
+
 rm -rf assets-ricing
 
 # Clonage des widgets (avec vérification)
